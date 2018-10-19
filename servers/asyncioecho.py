@@ -23,10 +23,10 @@ async def echo_server(loop, address, unix):
 		print('Server listening at', address)
 	with sock:
 		while True:
-			 client, addr = await loop.sock_accept(sock)
-			 if PRINT:
+			client, addr = await loop.sock_accept(sock)
+			if PRINT:
 				print('Connection from', addr)
-			 loop.create_task(echo_client(loop, client))
+			loop.create_task(echo_client(loop, client))
 
 
 async def echo_client(loop, client):
@@ -54,10 +54,10 @@ async def echo_client_streams(reader, writer):
 	if PRINT:
 		print('Connection from', sock.getpeername())
 	while True:
-		 data = await reader.readline()
-		 if not data:
-			 break
-		 writer.write(data)
+		data = await reader.readline()
+		if not data:
+			break
+		writer.write(data)
 	if PRINT:
 		print('Connection closed')
 	writer.close()
