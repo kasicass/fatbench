@@ -1,4 +1,10 @@
-// openbsd: clang -o cecho -O2 -Wall -I/usr/local/include c-libuv-echo.c -L/usr/local/lib -luv
+// [openbsd]
+// clang -o cecho -O2 -Wall -I/usr/local/include c-libuv-echo.c -L/usr/local/lib -luv
+//
+// [debian]
+// aptitude install libuv1-dev
+// gcc -o cecho -O2 -Wall -I/usr/local/include c-libuv-echo.c -L/usr/local/lib -luv
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -103,3 +109,4 @@ int main()
 
 	return uv_run(loop, UV_RUN_DEFAULT);
 }
+
