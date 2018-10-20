@@ -91,7 +91,7 @@ if __name__ == '__main__':
 	parser.add_argument('--uvloop', default=False, action='store_true')
 	parser.add_argument('--streams', default=False, action='store_true')
 	parser.add_argument('--proto', default=False, action='store_true')
-	parser.add_argument('--addr', default='127.0.0.1:25000', type=str)
+	parser.add_argument('--addr', default='0.0.0.0:25000', type=str)
 	parser.add_argument('--print', default=False, action='store_true')
 	args = parser.parse_args()
 
