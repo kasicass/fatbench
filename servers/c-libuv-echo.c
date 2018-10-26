@@ -24,8 +24,8 @@ struct sockaddr_in addr;
 
 void alloc_buffer(uv_handle_t *handle, size_t suggested_size, uv_buf_t *buf)
 {
-	// TODO(kasicass): static malloc here
-	buf->base = (char*)malloc(suggested_size);
+	static char prealloc_buf[64*1024];
+	buf->base = prealloc_buf;
 	buf->len  = suggested_size;
 }
 
@@ -46,6 +46,7 @@ void echo_read(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)
 	}
 	else if (nread > 0)
 	{
+		// TODO(kasicass): reduce malloc() here
 		uv_write_t *req = (uv_write_t*)malloc(sizeof(uv_write_t));
 		uv_buf_t wrbuf = uv_buf_init(buf->base, nread);
 		uv_write(req, client, &wrbuf, 1, echo_write);
@@ -56,8 +57,8 @@ void echo_read(uv_stream_t *client, ssize_t nread, const uv_buf_t *buf)
 	// 不会！
 	// <1> win32 下，uv_write() 会调用 WSASend()，buf 内容直接复制给 kernel
 	// <2> unix 下，uv_write() 会复制一份 buf，然后丢入后台 queue，等待 thread 去 send
-	if (buf->base)
-		free(buf->base);
+	//if (buf->base)
+	//	free(buf->base);
 }
 
 void on_new_connection(uv_stream_t *server, int status)
