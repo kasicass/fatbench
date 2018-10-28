@@ -3,14 +3,30 @@
 package main
 
 import (
+	"os"
+	"log"
 	"fmt"
 	"net"
 	"strconv"
+	"flag"
+	"runtime/pprof"
 )
 
 const PORT = 25000
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to file")
 
 func main() {
+	flag.Parse()
+	if *cpuprofile != "" {
+		f, err := os.Create(*cpuprofile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+		defer f.Close()
+	}
+
 	server, err := net.Listen("tcp", ":"+strconv.Itoa(PORT))
 	if server == nil {
 		panic("couldn't start listening: " + err.Error())
